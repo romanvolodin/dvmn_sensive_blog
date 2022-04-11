@@ -3,14 +3,6 @@ from django.shortcuts import render
 from blog.models import Comment, Post, Tag
 
 
-def get_likes_count(post):
-    return post.likes_count
-
-
-def get_related_posts_count(tag):
-    return tag.posts.count()
-
-
 def serialize_post(post):
     return {
         'title': post.title,
@@ -55,8 +47,6 @@ def index(request):
         comments_count=Count('comments', distinct=True),
     ).order_by('published_at').select_related(
         'author'
-    ).prefetch_related(
-        'author',
     ).fetch_tags_with_posts_count()
     most_fresh_posts = list(fresh_posts)[-5:]
 
